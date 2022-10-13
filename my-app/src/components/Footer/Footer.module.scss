@@ -1,0 +1,9 @@
+.footer {
+  @apply py-4;
+  .nav {
+    @apply flex justify-around;
+    .link {
+      @apply text-gray-600 hover:text-blue-400 transition-colors;
+    }
+  }
+}

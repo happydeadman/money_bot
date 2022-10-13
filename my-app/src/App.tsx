@@ -1,32 +1,56 @@
 import React from "react";
-import logo from "./logo.svg";
-import "./App.css";
 import axios from "axios";
+import "./App.css";
+import { Home } from "./pages/Home";
+import { Route, Routes } from "react-router-dom";
+import { Login } from "./pages/Login";
+import { Layout } from "./components/Layout";
+import { Header } from "./components/Header";
+import { Footer } from "./components/Footer";
+
+import { useTypedSelector } from "./utils/hooks/useTypedSelector";
+import { useActions } from "./utils/hooks/useActions";
+import { ProtectedRoutes } from "./components/ProtectedRoutes/ProtectedRoutes";
+
+axios.defaults.withCredentials = true;
 
 function App() {
-  const clickHandler = () => {
-    axios.get("http://localhost:3001/payments").then((response) => {
-      console.log(JSON.stringify(response));
-    });
-  };
+  const { token } = useTypedSelector((state) => state.user);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+    <>
+      <Layout>
+        <Header />
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route element={<ProtectedRoutes />}>
+            <Route path="/" element={<Home />} />
+          </Route>
+        </Routes>
+
+        <button
+          type="button"
+          onClick={() => {
+            axios.get("http://localhost:3001/users/profile", {
+              headers: { Authorization: `Bearer ${token}` },
+            });
+          }}
         >
-          Learn React
-        </a>
-        <button onClick={() => clickHandler()}>test request</button>
-      </header>
-    </div>
+          Проверить защищенный роут
+        </button>
+        <button
+          type="button"
+          onClick={() => {
+            axios.get("http://localhost:3001/payments", {
+              headers: { Authorization: `Bearer ${token}` },
+            });
+          }}
+        >
+          Проверить запрос данных
+        </button>
+        <Footer />
+      </Layout>
+    </>
   );
 }
 

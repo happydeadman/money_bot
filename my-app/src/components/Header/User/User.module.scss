@@ -1,0 +1,6 @@
+.userBlock {
+  @apply border rounded max-w-xs pl-16 pr-4 py-3 bg-[url('https://cdn-icons-png.flaticon.com/512/456/456212.png')] bg-no-repeat bg-contain bg-left hover:bg-blue-400 hover:text-white transition-colors hover:cursor-pointer;
+  .userName {
+    @apply break-words;
+  }
+}

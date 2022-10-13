@@ -9,7 +9,9 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { CreatePaymentDto } from './dto/create-payment.dto';
 import { UpdatePaymentDto } from './dto/update-payment.dto';
 import { PaymentService } from './payment.service';
@@ -18,6 +20,7 @@ import { Payment } from './schemas/payment.schema';
 @Controller('payments')
 export class PaymentController {
   constructor(private readonly paymentService: PaymentService) {}
+  @UseGuards(JwtAuthGuard)
   @Get()
   async getAll(): Promise<Payment[]> {
     return this.paymentService.getAll();

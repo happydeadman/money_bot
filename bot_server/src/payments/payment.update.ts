@@ -61,15 +61,16 @@ export class PaymentUpdate {
       );
     }
     if (ctx.session.type === 'edit') {
-      const [id, name] = message.split(',');
+      const [id, name, amount] = message.split(',');
 
       try {
         const editedPayment = await this.paymentService.getById(id);
 
         const newPayment = await this.paymentService.update(id, {
           name: name,
-          amount: '123',
+          amount: amount,
         });
+        await ctx.reply('Успешно отредактировано');
       } catch (err) {
         console.log(err);
         await ctx.reply('Такого ID нет');
