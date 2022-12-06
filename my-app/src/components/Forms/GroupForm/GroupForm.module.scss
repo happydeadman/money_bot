@@ -1,0 +1,41 @@
+.form {
+  @apply flex flex-col;
+  .inputContainer {
+    position: relative;
+    margin-bottom: 20px;
+  }
+  .inputContainer label {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    font-size: 16px;
+    color: black;
+    pointer-event: none;
+    transition: top 0.3s ease-in-out, font-size 0.3s ease-in-out;
+  }
+  .inputContainer input {
+    border: 0;
+    border-bottom: 1px solid #555;
+    background: transparent;
+    width: 100%;
+    padding: 8px 0 5px 0;
+    font-size: 16px;
+    color: black;
+  }
+  .inputContainer input:focus {
+    border: none;
+    outline: none;
+    border-bottom: 1px solid #3c72e7;
+  }
+  .select {
+    @apply mb-4;
+  }
+  .inputContainer input:focus ~ label,
+  .inputContainer input:valid ~ label {
+    top: -12px;
+    font-size: 12px;
+  }
+  .btn {
+    @apply mb-2 last:mb-0 md:mb-0 md:mr-6 md:last:mr-0 uppercase text-base md:text-lg py-4 px-8 border border-blue-500 rounded-lg bg-blue-100 last:bg-white hover:bg-blue-500 hover:text-white transition-colors;
+  }
+}

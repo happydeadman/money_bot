@@ -14,9 +14,13 @@ export class PaymentService {
   async getAll(): Promise<Payment[]> {
     return this.paymentModel.find().exec();
   }
-
   async getById(id: string): Promise<Payment> {
     return this.paymentModel.findById(id);
+  }
+  async getByGroupId(id: string): Promise<Payment[]> {
+    return this.paymentModel.find({
+      userGroup: id,
+    });
   }
 
   async addPayment(paymentDto: CreatePaymentDto): Promise<Payment> {

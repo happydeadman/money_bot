@@ -57,7 +57,7 @@ export class PaymentUpdate {
         amount: amount,
       });
       await ctx.replyWithHTML(
-        `Название платежа: ${payment.name}, Сумма: ${payment.amount}`,
+        `Название платежа: ${payment.name}, Сумма: ${payment.totalAmount}`,
       );
     }
     if (ctx.session.type === 'edit') {

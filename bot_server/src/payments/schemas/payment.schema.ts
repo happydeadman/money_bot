@@ -8,9 +8,15 @@ export class Payment {
   @Prop()
   name: string;
   @Prop()
-  amount: string;
+  totalAmount: number;
+  @Prop()
+  income: [{ userId: string; amount: number; userName: string }];
   @Prop()
   id: string;
+  @Prop()
+  date: Date;
+  @Prop()
+  userGroup: string;
 }
 
 export const PaymentSchema = SchemaFactory.createForClass(Payment);

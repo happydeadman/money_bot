@@ -1,0 +1,28 @@
+.form {
+  @apply flex flex-col;
+  .label {
+    @apply mb-2 md:mb-4;
+  }
+  .inputNumberContainer {
+    @apply flex items-end text-blue-500;
+    max-width: 400px;
+    .numberInput {
+      @apply text-right mr-2 text-6xl w-full;
+    }
+  }
+  .listItem {
+    @apply flex justify-between items-center;
+    .textBlock {
+      @apply flex flex-col;
+      .userName {
+        @apply md:text-lg;
+      }
+      .splitedAmount {
+        @apply text-sm text-gray-400;
+      }
+    }
+  }
+  .select {
+    @apply mb-4 md:mb-4;
+  }
+}

@@ -1,20 +1,16 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PaymentEntity } from './payment.entities';
 import { Repository } from 'typeorm';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AppService {
-  // constructor(
-  //   @InjectRepository(PaymentEntity)
-  //   private readonly paymentRepository: Repository<PaymentEntity>,
-  // ) {}
-  // async getAll() {
-  //   return this.paymentRepository.find();
-  // }
-  // async addPayment(name: string) {
-  //   const payment = await this.paymentRepository.create({ name });
-  //   await this.paymentRepository.save(payment);
-  //   return this.getAll;
+  // @Inject(ConfigService)
+  // public config: ConfigService;
+  // public getHello(): string {
+  //   const databaseName: string = this.config.get('MONGO_URL');
+  //   console.log({ databaseName });
+  //   return 'Hello World!';
   // }
 }

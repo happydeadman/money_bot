@@ -1,0 +1,10 @@
+.main {
+  flex: 1;
+  @apply flex flex-col;
+  .groupContainer {
+    @apply bg-blue-200 flex flex-col place-items-center py-4;
+    .groupInfo {
+      @apply flex;
+    }
+  }
+}

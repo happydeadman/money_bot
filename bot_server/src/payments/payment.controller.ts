@@ -20,7 +20,7 @@ import { Payment } from './schemas/payment.schema';
 @Controller('payments')
 export class PaymentController {
   constructor(private readonly paymentService: PaymentService) {}
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @Get()
   async getAll(): Promise<Payment[]> {
     return this.paymentService.getAll();
@@ -28,6 +28,10 @@ export class PaymentController {
   @Get(':id')
   async getById(id: string): Promise<Payment> {
     return this.paymentService.getById(id);
+  }
+  @Get('groupPayments/:groupId')
+  async getUserGroups(@Param('groupId') groupId: string): Promise<Payment[]> {
+    return this.paymentService.getByGroupId(groupId);
   }
 
   @Post()

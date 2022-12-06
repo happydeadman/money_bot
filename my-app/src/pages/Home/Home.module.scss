@@ -1,4 +1,27 @@
 .main {
   flex: 1;
-  @apply flex;
+  @apply flex flex-col justify-center items-center;
+  .container {
+    @apply flex flex-col border px-5 py-6 rounded-r-md items-center;
+    box-shadow: 0 2px 1px -1px #0003, 0 1px 1px #00000024, 0 1px 3px #0000001f;
+    .groupHeading {
+      @apply font-bold text-lg md:text-xl mb-3 md:mb-4;
+    }
+    .listItem {
+      @apply mb-1 md:mb-2;
+      .link {
+        @apply hover:bg-slate-300 focus:hover:bg-slate-300 flex items-center px-2 md:px-4 py-2 md:py-2 transition-colors;
+      }
+      .link::before {
+        content: "";
+        display: inline-block;
+        height: 10px;
+        width: 10px;
+        margin-right: 5px;
+        border-radius: 100vh;
+        background-color: red;
+        font-size: 3px;
+      }
+    }
+  }
 }

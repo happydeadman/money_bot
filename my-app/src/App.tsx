@@ -11,6 +11,8 @@ import { Footer } from "./components/Footer";
 import { useTypedSelector } from "./utils/hooks/useTypedSelector";
 import { useActions } from "./utils/hooks/useActions";
 import { ProtectedRoutes } from "./components/ProtectedRoutes/ProtectedRoutes";
+import { Group } from "./pages/Group";
+import { Payments } from "./pages/Payments";
 
 axios.defaults.withCredentials = true;
 
@@ -25,6 +27,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route element={<ProtectedRoutes />}>
             <Route path="/" element={<Home />} />
+            <Route path="/group/:id" element={<Payments />} />
           </Route>
         </Routes>
 

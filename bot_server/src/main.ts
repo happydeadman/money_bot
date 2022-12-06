@@ -4,6 +4,7 @@ import passport from 'passport';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
+  console.log(process.env.DATABASE_URL);
   const app = await NestFactory.create(AppModule, {
     cors: {
       origin: 'http://localhost:3000',

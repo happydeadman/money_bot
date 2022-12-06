@@ -16,8 +16,8 @@ export const paymentsApi = createApi({
     },
   }),
   endpoints: (build) => ({
-    getPayments: build.query<IPayment[], number>({
-      query: (limit) => `payments?limit=${limit}`,
+    getPayments: build.query<IPayment[], string | undefined>({
+      query: (groupId) => `payments/groupPayments/${groupId}`,
     }),
   }),
 });
