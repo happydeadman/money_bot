@@ -1,0 +1,6 @@
+.nav {
+  @apply flex pt-3;
+}
+.nav a {
+  @apply first:mr-4;
+}

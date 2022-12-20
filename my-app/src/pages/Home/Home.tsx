@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { GroupForm } from "../../components/Forms/GroupForm";
 import { Modal } from "../../components/Modal";
 import { useGetGroupsQuery } from "../../store/groups/groups.api";
-
 import { useTypedSelector } from "../../utils/hooks/useTypedSelector";
 import styles from "./Home.module.scss";
 
@@ -21,7 +20,7 @@ export function Home() {
             data.map((item) => {
               return (
                 <li key={item._id} className={styles.listItem}>
-                  <Link className={styles.link} to={`/group/${item._id}`}>
+                  <Link className={styles.link} to={`/group/${item._id}/join`}>
                     {item.name}, количетсво участников {item.users.length}
                   </Link>
                 </li>
@@ -29,11 +28,12 @@ export function Home() {
             })}
         </ul>
         <button
+          className={styles.button}
           onClick={() => {
             setIsModalOpen(!isModalOpen);
           }}
         >
-          Создать новую группу{" "}
+          Создать новую группу
         </button>
         {isModalOpen && (
           <Modal

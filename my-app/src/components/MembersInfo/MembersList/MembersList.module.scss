@@ -1,0 +1,21 @@
+.membersContainer {
+  @apply flex flex-col w-full shadow-lg lg:w-4/5 xl:w-3/5 mx-auto mb-12;
+  .heading {
+    @apply text-sm p-4;
+  }
+  .listItem {
+    .btn {
+      @apply p-4 w-full flex justify-between hover:bg-blue-100 border-b-2 transition-colors items-center;
+      .info {
+        @apply flex flex-col items-start overflow-hidden w-full text-gray-500 opacity-90 text-sm;
+        .memberName {
+          @apply text-lg overflow-hidden text-ellipsis whitespace-nowrap text-black;
+          max-width: 60%;
+        }
+      }
+      .amount {
+        @apply text-base text-blue-500 font-medium whitespace-nowrap overflow-hidden text-ellipsis w-1/3 sm:overflow-visible sm:w-auto;
+      }
+    }
+  }
+}

@@ -1,36 +1,42 @@
 import { FormEvent, useRef, useState } from "react";
-import Select from "react-select";
 import axios from "axios";
 import { useTypedSelector } from "../../../utils/hooks/useTypedSelector";
-import { useNavigate } from "react-router-dom";
+import { IGroups } from "../../../store/groups/groups.type";
+import { generateRandomString } from "../../../utils/js/generateRandomString";
+import { useGetPaymentsQuery } from "../../../store/payments/payments.api";
 import { useGetGroupsQuery } from "../../../store/groups/groups.api";
-import styles from "./GroupForm.module.scss";
+import styles from "./NewMemberForm.module.scss";
 
-export function GroupForm() {
-  const [currency, setCurrency] = useState<any>("");
+export interface IMemberForm extends IGroups {
+  handleClose: () => void | null;
+}
+
+export function NewMemberForm({
+  currency,
+  _id,
+  users,
+  name,
+  handleClose,
+}: IMemberForm) {
   const refInput = useRef<HTMLInputElement>(null);
-  const { userId, userName } = useTypedSelector((state) => state.user);
-  const { refetch } = useGetGroupsQuery(userId);
+  const { userId } = useTypedSelector((state) => state.user);
+  const { refetch: refetchPayments } = useGetPaymentsQuery(_id);
+  const { refetch: refetchGroup } = useGetGroupsQuery(userId);
 
-  const options = [
-    { value: "rub", label: "Рубль" },
-    { value: "usd", label: "USD" },
-    { value: "kzt", label: "Тенге" },
-  ];
-  const navigate = useNavigate();
   const onSubmitHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     axios
-      .post(
-        "http://localhost:3001/groups",
+      .put(
+        `http://localhost:3001/groups/${_id}`,
         {
-          name: refInput.current?.value,
-          currency: currency ? currency : "rub",
+          name: name,
+          currency: currency,
           users: [
+            ...users,
             {
-              userId: userId,
-              userName: userName,
+              userName: refInput.current?.value,
+              userId: generateRandomString(),
             },
           ],
         },
@@ -45,14 +51,14 @@ export function GroupForm() {
       )
       .then((response) => {
         console.log(response.data);
-        refetch();
-        navigate(`/group/${response.data._id}/join`);
+        refetchPayments();
+        refetchGroup();
+        handleClose();
       })
       .catch((error) => {
         console.log(error);
       });
   };
-
   return (
     <form
       className={styles.form}
@@ -65,22 +71,15 @@ export function GroupForm() {
           className={styles.input}
           ref={refInput}
           type="text"
-          id="groupName"
+          id="memberName"
           required
         />
-        <label className={styles.groupNames} htmlFor="groupName">
-          Название группы
+        <label className={styles.memberName} htmlFor="memberName">
+          Имя участника
         </label>
       </div>
-
-      <Select
-        className={styles.select}
-        placeholder={"Укажи валюту группы"}
-        options={options}
-        onChange={(val) => setCurrency(val?.value)}
-      />
       <button className={styles.btn} type="submit">
-        Создать
+        Готово
       </button>
     </form>
   );

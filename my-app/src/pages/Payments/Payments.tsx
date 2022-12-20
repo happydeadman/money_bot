@@ -1,10 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useGetPaymentsQuery } from "../../store/payments/payments.api";
-import { Circle } from "../../components/Circle";
 import { GroupInfo } from "../../components/GroupInfo";
-import { Modal } from "../../components/Modal";
-import { PaymentForm } from "../../components/Forms/PaymentForm";
 import { useGetGroupsQuery } from "../../store/groups/groups.api";
 import { useTypedSelector } from "../../utils/hooks/useTypedSelector";
 import { IGroups } from "../../store/groups/groups.type";
@@ -12,6 +9,8 @@ import { IPayment, IUserIncome } from "../../store/payments/payments.type";
 import { sumById } from "../../utils/js/sumById";
 import { getUniqueListBy } from "../../utils/js/getUniqueListBy";
 import styles from "./Payments.module.scss";
+import { PaymentsBlock } from "../../components/PaymentsBlock";
+import { MembersInfo } from "../../components/MembersInfo";
 
 export interface IGroupDetails {
   paymentsAmount: number;
@@ -20,14 +19,36 @@ export interface IGroupDetails {
 }
 
 export function Payments() {
-  const { id } = useParams();
-  const { userId } = useTypedSelector((state) => state.user);
+  const { id, action } = useParams();
+  const { userId, userName } = useTypedSelector((state) => state.user);
   const { data: groups } = useGetGroupsQuery(userId);
   const { data: payments, isLoading, isError } = useGetPaymentsQuery(id);
 
   const [groupInfo, setGroupInfo] = useState<IGroups>();
-  const [groupDetails, setGroupDetails] = useState<IGroupDetails>();
-  const [isOpen, setIsOpen] = useState(false);
+  const [groupDetails, setGroupDetails] = useState<IGroupDetails>({
+    paymentsAmount: 0,
+    totalAmount: 0,
+    whoPayNext: {
+      amount: 0,
+      userId: userId,
+      userName: userName,
+    },
+  });
+  const [page, setPage] = useState<JSX.Element>();
+
+  useEffect(() => {
+    if (!payments || !groupInfo) return;
+    const determineAction = (action: string = "join") => {
+      switch (action) {
+        case "join":
+          return <PaymentsBlock payments={payments} groupInfo={groupInfo} />;
+        case "members":
+          return <MembersInfo group={groupInfo} />;
+      }
+    };
+
+    setPage(determineAction(action));
+  }, [action, payments, groupInfo]);
 
   useEffect(() => {
     setGroupInfo(groups?.find((g) => g._id === id));
@@ -40,60 +61,8 @@ export function Payments() {
 
   return (
     <main className={styles.main}>
-      <div className={styles.groupContainer}>
-        <div className={styles.groupInfo}>
-          <Circle
-            userId={groupDetails?.whoPayNext.userName}
-            amount={groupDetails?.whoPayNext.amount}
-          />
-          {groupInfo && groupDetails && (
-            <GroupInfo
-              name={groupInfo.name}
-              whoPayNext={groupDetails.whoPayNext}
-              totalAmount={groupDetails.totalAmount}
-              paymentsAmount={groupDetails.paymentsAmount}
-              currency={groupInfo.currency}
-              users={groupInfo.users}
-              _id={groupInfo._id}
-            />
-          )}
-        </div>
-        <nav>menu</nav>
-      </div>
-      <div className={styles.transactionContainer}>
-        {payments &&
-          payments.map((payment) => {
-            return (
-              <li key={payment._id}>
-                {payment.name} - {payment.totalAmount}
-              </li>
-            );
-          })}
-      </div>
-      {groupInfo && (
-        <>
-          <button
-            onClick={(e) => {
-              setIsOpen(!isOpen);
-            }}
-          >
-            + Добавить транзакцию
-          </button>
-          {isOpen && (
-            <Modal
-              handleClose={() => setIsOpen(false)}
-              isOpen={isOpen}
-              header={"Добавить платеж"}
-            >
-              <PaymentForm
-                groupId={groupInfo._id}
-                currency={groupInfo.currency}
-                users={groupInfo.users}
-              />
-            </Modal>
-          )}
-        </>
-      )}
+      <GroupInfo groupDetails={groupDetails} groupInfo={groupInfo} />
+      {page}
     </main>
   );
 }

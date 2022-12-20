@@ -1,11 +1,14 @@
 import axios from "axios";
-import React, { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 import Select from "react-select";
+import { useGetPaymentsQuery } from "../../../store/payments/payments.api";
 import styles from "./PaymentForm.module.scss";
+import { Input } from "../../Input";
 
 interface IPaymentForm {
   groupId: string;
   currency: string;
+  handleClose: () => void | null;
   users: [
     {
       userName: string;
@@ -15,7 +18,8 @@ interface IPaymentForm {
 }
 
 export function PaymentForm(props: IPaymentForm) {
-  const { groupId, users, currency } = props;
+  const { groupId, users, currency, handleClose } = props;
+  const { refetch } = useGetPaymentsQuery(groupId);
 
   const [amountValue, setAmountValue] = useState(0);
   const [payer, setPayer] = useState<String | undefined>("");
@@ -76,6 +80,8 @@ export function PaymentForm(props: IPaymentForm) {
       )
       .then((response) => {
         console.log(response.data);
+        refetch();
+        handleClose();
       })
       .catch((error) => {
         console.log(error);
@@ -135,14 +141,14 @@ export function PaymentForm(props: IPaymentForm) {
       <label className={styles.label} htmlFor="name">
         Назначение платежа
       </label>
-      <input
+      <Input
         value={paymentName}
-        onChange={(e) => {
-          setPaymentName(e.target.value);
-        }}
         type="text"
         name="name"
         placeholder="Например Пиво и чипсы"
+        onChange={(e) => {
+          setPaymentName(e.target.value);
+        }}
       />
 
       <button type="submit">Готово</button>

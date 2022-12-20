@@ -1,0 +1,12 @@
+.groupInfoContainer {
+  @apply overflow-hidden text-ellipsis;
+  .groupName {
+    @apply text-2xl md:text-3xl overflow-hidden text-ellipsis;
+  }
+  .groupItem {
+    @apply text-sm md:text-lg;
+  }
+  .accent {
+    @apply font-bold;
+  }
+}

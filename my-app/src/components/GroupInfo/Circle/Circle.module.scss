@@ -1,0 +1,12 @@
+.container {
+  @apply flex w-56 h-56 bg-orange-300 rounded-full flex-col place-items-center justify-center text-3xl overflow-hidden overflow-ellipsis whitespace-nowrap md:mr-7 mb-3 md:mb-0;
+  .name {
+    opacity: 0.45;
+  }
+  .amount {
+    opacity: 0.75;
+  }
+  .text {
+    @apply text-lg;
+  }
+}

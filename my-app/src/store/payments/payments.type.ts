@@ -3,6 +3,8 @@ export interface IPayment {
   name: string;
   totalAmount: number;
   income: IUserIncome[];
+  date: Date;
+  userGroup: string;
 }
 
 export interface IUserIncome {

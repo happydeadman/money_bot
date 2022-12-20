@@ -1,39 +1,38 @@
 import React from "react";
 import { IGroupDetails } from "../../pages/Payments";
 import { IGroups } from "../../store/groups/groups.type";
+import { Circle } from "./Circle";
+import { GroupDetails } from "./GroupDetails";
 import styles from "./GroupInfo.module.scss";
+import { GroupNavigation } from "./GroupNavigation";
 
-interface IGroupInfo extends IGroups, IGroupDetails {}
+export interface IGroupInfo {
+  groupInfo?: IGroups;
+  groupDetails?: IGroupDetails;
+}
 
-export function GroupInfo({
-  name,
-  users,
-  currency,
-  _id,
-  whoPayNext,
-  paymentsAmount,
-  totalAmount,
-}: IGroupInfo) {
+export function GroupInfo({ groupInfo, groupDetails }: IGroupInfo) {
   return (
-    <div>
-      <h3>{name}</h3>
-      <ul>
-        <li>
-          Транзакции: <span>{paymentsAmount}</span>
-        </li>
-        <li>
-          Участники: <span>{users.length}</span>
-        </li>
-        <li>
-          Итого заплачено:{" "}
-          <span>
-            {currency} {totalAmount}
-          </span>
-        </li>
-      </ul>
-      <div>
-        Следующим платит <span>{whoPayNext.userName}</span>
+    <div className={styles.groupContainer}>
+      <div className={styles.groupInfo}>
+        <Circle
+          currency={groupInfo?.currency}
+          userId={groupDetails?.whoPayNext.userName}
+          amount={groupDetails?.whoPayNext.amount}
+        />
+        {groupInfo && groupDetails && (
+          <GroupDetails
+            name={groupInfo.name}
+            whoPayNext={groupDetails.whoPayNext}
+            totalAmount={groupDetails.totalAmount}
+            paymentsAmount={groupDetails.paymentsAmount}
+            currency={groupInfo.currency}
+            users={groupInfo.users}
+            _id={groupInfo._id}
+          />
+        )}
       </div>
+      <GroupNavigation />
     </div>
   );
 }

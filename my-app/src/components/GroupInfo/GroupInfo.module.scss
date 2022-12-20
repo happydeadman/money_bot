@@ -1,1 +1,6 @@
-/* your css code */
+.groupContainer {
+  @apply bg-blue-200 flex flex-col place-items-center py-4 px-4;
+  .groupInfo {
+    @apply flex flex-col md:flex-row items-center w-full justify-center;
+  }
+}
