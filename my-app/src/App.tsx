@@ -1,34 +1,40 @@
 import axios from "axios";
 import "./App.css";
 import { Home } from "./pages/Home";
-import { Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Login } from "./pages/Login";
 import { Layout } from "./components/Layout";
 import { Header } from "./components/Header";
 import { Footer } from "./components/Footer";
-import { useTypedSelector } from "./utils/hooks/useTypedSelector";
 import { ProtectedRoutes } from "./components/ProtectedRoutes/ProtectedRoutes";
 import { Payments } from "./pages/Payments";
+import { useEffect, useState } from "react";
 
 axios.defaults.withCredentials = true;
 
 function App() {
-  const { token } = useTypedSelector((state) => state.user);
-
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
   return (
     <>
-      <Layout>
-        <Header />
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route element={<ProtectedRoutes />}>
-            <Route path="/" element={<Home />} />
-            <Route path="/group/:id/:action" element={<Payments />} />
-          </Route>
-        </Routes>
+      {mounted && (
+        <Layout>
+          <BrowserRouter>
+            <Header />
+            <Routes>
+              <Route path="/login" element={<Login />} />
+              <Route element={<ProtectedRoutes />}>
+                <Route path="/" element={<Home />} />
+                <Route path="/group/:id/:action" element={<Payments />} />
+              </Route>
+            </Routes>
 
-        <Footer />
-      </Layout>
+            <Footer />
+          </BrowserRouter>
+        </Layout>
+      )}
     </>
   );
 }

@@ -3,12 +3,14 @@ import React, { SyntheticEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { EIcons, Icons } from "../../icons/Icons";
 import { useActions } from "../../utils/hooks/useActions";
+import Cookies from "universal-cookie";
 import styles from "./Login.module.scss";
 
 interface IUserLogin {
   name: string;
   password: string;
 }
+const cookies = new Cookies();
 
 export function Login() {
   const [user, setLoginUser] = useState<IUserLogin>({ name: "", password: "" });
@@ -37,6 +39,7 @@ export function Login() {
       )
       .then((response) => {
         const { username, sub } = response.data;
+        cookies.set("token", response.data.access_token, { path: "/" });
         setUser({
           userName: username,
           userId: sub,

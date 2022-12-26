@@ -19,7 +19,6 @@ import { Group } from './schemas/groups.schema';
 @Controller('groups')
 export class GroupsController {
   constructor(private readonly groupsService: GroupsService) {}
-  // @UseGuards(JwtAuthGuard)
   @Get()
   async getAll(): Promise<Group[]> {
     return this.groupsService.getAll();
@@ -28,6 +27,7 @@ export class GroupsController {
   async getById(@Param('id') id: string): Promise<Group> {
     return this.groupsService.getById(id);
   }
+  @UseGuards(JwtAuthGuard)
   @Get('userGroups/:userId')
   async getUserGroups(@Param('userId') userId: string): Promise<Group[]> {
     return this.groupsService.getUserGroups(userId);

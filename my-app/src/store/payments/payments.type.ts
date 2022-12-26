@@ -9,6 +9,6 @@ export interface IPayment {
 
 export interface IUserIncome {
   userName: string;
-  userId: string;
+  userId: any;
   amount: number;
 }

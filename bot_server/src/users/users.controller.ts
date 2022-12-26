@@ -37,7 +37,7 @@ export class UsersController {
   //Post / Login
   @UseGuards(LocalAuthGuard)
   @Post('/login')
-  login(@Request() req): any {
+  login(@Request() req) {
     return this.authService.login(req.user);
   }
   //Get / protected local

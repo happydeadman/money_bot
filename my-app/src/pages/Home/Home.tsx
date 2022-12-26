@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { GroupForm } from "../../components/Forms/GroupForm";
 import { Modal } from "../../components/Modal";
@@ -7,9 +7,16 @@ import { useTypedSelector } from "../../utils/hooks/useTypedSelector";
 import styles from "./Home.module.scss";
 
 export function Home() {
+  const [skip, setSkip] = useState(false);
+
   const { userId } = useTypedSelector((state) => state.user);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { isError, isLoading, data } = useGetGroupsQuery(userId);
+  const { isError, isLoading, data } = useGetGroupsQuery(userId, { skip });
+
+  useEffect(() => {
+    // if (userId) setSkip(false);
+    // if (userId) setSkip(true);
+  }, [userId]);
 
   return (
     <main className={styles.main}>

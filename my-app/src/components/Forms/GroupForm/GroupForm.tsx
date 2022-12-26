@@ -7,17 +7,17 @@ import { useGetGroupsQuery } from "../../../store/groups/groups.api";
 import styles from "./GroupForm.module.scss";
 
 export function GroupForm() {
-  const [currency, setCurrency] = useState<any>("");
-  const refInput = useRef<HTMLInputElement>(null);
   const { userId, userName } = useTypedSelector((state) => state.user);
   const { refetch } = useGetGroupsQuery(userId);
+  const [currency, setCurrency] = useState<any>("");
+  const navigate = useNavigate();
+  const refInput = useRef<HTMLInputElement>(null);
 
   const options = [
     { value: "rub", label: "Рубль" },
     { value: "usd", label: "USD" },
     { value: "kzt", label: "Тенге" },
   ];
-  const navigate = useNavigate();
   const onSubmitHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 

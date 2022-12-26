@@ -1,13 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 export interface IUser {
-  userId: string;
+  userId: any;
   userName: string;
   token: string;
 }
 
 const initialState: IUser = {
-  userId: "",
+  userId: null,
   userName: "",
   token: "",
 };
@@ -22,7 +22,7 @@ const userSlice = createSlice({
       state.token = action.payload.token;
     },
     removeUser(state) {
-      state.userId = "";
+      state.userId = null;
       state.userName = "";
       state.token = "";
     },

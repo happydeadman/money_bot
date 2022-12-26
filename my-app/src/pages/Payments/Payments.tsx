@@ -8,9 +8,9 @@ import { IGroups } from "../../store/groups/groups.type";
 import { IPayment, IUserIncome } from "../../store/payments/payments.type";
 import { sumById } from "../../utils/js/sumById";
 import { getUniqueListBy } from "../../utils/js/getUniqueListBy";
-import styles from "./Payments.module.scss";
 import { PaymentsBlock } from "../../components/PaymentsBlock";
 import { MembersInfo } from "../../components/MembersInfo";
+import styles from "./Payments.module.scss";
 
 export interface IGroupDetails {
   paymentsAmount: number;
@@ -84,7 +84,7 @@ const calculatePayments = (payments: IPayment[]) => {
   const incomeByUser = uniqueUserList.map((user) => ({
     userName: user.userName,
     userId: user.userId,
-    amount: sumById(user.userId, allIncome),
+    amount: sumById(user.userId ? user.userId : "", allIncome),
   }));
 
   const smallestIncome = incomeByUser.reduce((prev, curr) =>

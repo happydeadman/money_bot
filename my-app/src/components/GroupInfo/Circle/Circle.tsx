@@ -2,7 +2,7 @@ import React from "react";
 import styles from "./Circle.module.scss";
 
 interface ICircleProps {
-  userId?: string;
+  userId?: string | null;
   amount?: number;
   currency?: string;
 }

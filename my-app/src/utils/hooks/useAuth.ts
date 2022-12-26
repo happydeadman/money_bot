@@ -1,13 +1,26 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
-import { useTypedSelector } from "./useTypedSelector";
+import Cookies from "universal-cookie";
+import jwt from "jwt-decode";
+import { useActions } from "./useActions";
+import { useEffect } from "react";
+
+const cookie = new Cookies();
 
 export function useAuth() {
-  const { userId, userName } = useTypedSelector((state) => state.user);
+  const { setUser } = useActions();
+  const token = cookie.get("token");
+
+  useEffect(() => {
+    if (token) {
+      const { username, sub }: any = jwt(token);
+      setUser({
+        userName: username,
+        userId: sub,
+        token: token,
+      });
+    }
+  }, [setUser, token]);
 
   return {
-    isAuth: !!userName,
-    userName,
-    userId,
+    isAuth: !!token,
   };
 }
