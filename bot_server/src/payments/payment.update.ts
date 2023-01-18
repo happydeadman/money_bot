@@ -13,7 +13,7 @@ import { actionButtons } from '../app.buttons';
 import { Context } from '../context.interface';
 import { PaymentService } from './payment.service';
 
-const webLink = 'https://pomodoro-box-tau.vercel.app/';
+const webLink = 'https://2453-188-226-109-63.eu.ngrok.io/';
 
 @Update()
 export class PaymentUpdate {

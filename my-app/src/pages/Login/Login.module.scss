@@ -15,10 +15,13 @@
       @apply text-base md:text-lg text-center mb-4 md:mb-8;
     }
     .inputContainer {
-      @apply relative;
+      @apply relative mb-5 md:mb-10;
       max-width: 289px;
       .input {
-        @apply pb-1 pl-2 text-base md:text-lg border-b-2 border-b-gray-400 mb-5 md:mb-10;
+        @apply w-full pb-1 pl-2 text-base md:text-lg border-b-2 border-b-gray-400;
+      }
+      .error {
+        @apply text-red-500 text-sm;
       }
       .showPassword {
         @apply absolute right-0;
@@ -44,5 +47,8 @@
     left: 0;
     right: 0;
     text-align: center;
+  }
+  .alertContainer {
+    @apply absolute bottom-52 px-6 lg:px-20 md:px-12;
   }
 }

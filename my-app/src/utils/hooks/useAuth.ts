@@ -11,10 +11,10 @@ export function useAuth() {
 
   useEffect(() => {
     if (token) {
-      const { username, sub }: any = jwt(token);
+      const { username, userId }: any = jwt(token);
       setUser({
         userName: username,
-        userId: sub,
+        userId: userId,
         token: token,
       });
     }

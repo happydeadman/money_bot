@@ -1,34 +1,42 @@
-import React, { MouseEvent } from "react";
+import React, { MouseEvent, useState } from "react";
 import axios from "axios";
-import Cookies from "universal-cookie";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { EIcons, Icons } from "../../icons/Icons";
 import { User } from "./User";
 import { Dropdown } from "../Dropdown";
 import { useAuth } from "../../utils/hooks/useAuth";
-import { useActions } from "../../utils/hooks/useActions";
 import { useTypedSelector } from "../../utils/hooks/useTypedSelector";
 import styles from "./Header.module.scss";
-
-const cookies = new Cookies();
+import { Loader } from "../Loader";
+import { useToast } from "@chakra-ui/react";
+import { useLogout } from "../../utils/hooks/useLogout";
 
 export function Header() {
+  const [isLoading, setIsLoading] = useState(false);
   const { isAuth } = useAuth();
+  const toast = useToast();
   const { userName } = useTypedSelector((state) => state.user);
-  const { removeUser } = useActions();
-  const navigate = useNavigate();
+  const logout = useLogout();
+
   const logoutHandler = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+    setIsLoading(true);
     axios
       .get("http://localhost:3001/users/logout", {
         withCredentials: true,
       })
       .then((response) => {
-        cookies.remove("token", { path: "/" });
-        removeUser();
-        navigate("/login");
+        setIsLoading(false);
+        logout();
       })
       .catch((error) => {
+        toast({
+          title: "Что-то пошло не так",
+          description: "Пожалуйста, попробуйте позже",
+          status: "error",
+          duration: 9000,
+          isClosable: true,
+        });
         console.log(error);
       });
   };
@@ -71,6 +79,7 @@ export function Header() {
           </button>
         </Dropdown>
       )}
+      {isLoading && <Loader />}
     </header>
   );
 }

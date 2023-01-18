@@ -5,6 +5,8 @@ import {
   Post,
   UseGuards,
   Request,
+  Res,
+  HttpStatus,
 } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { AuthService } from 'src/auth/auth.service';
@@ -22,11 +24,17 @@ export class UsersController {
   //signup
   @Post('/signup')
   async addUser(
+    @Res() res,
     @Body('password') userPassword: string,
     @Body('username') userName: string,
   ) {
     const saltOrRounds = 10;
     const hashedPassword = await bcrypt.hash(userPassword, saltOrRounds);
+    if (await this.usersService.doesUserExist(userName)) {
+      return res.status(HttpStatus.UNAUTHORIZED).json({
+        message: 'User already exists',
+      });
+    }
     const result = await this.usersService.insertUser(userName, hashedPassword);
     return {
       msg: 'User successfully registered',

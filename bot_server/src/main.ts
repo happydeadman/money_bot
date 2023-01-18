@@ -8,6 +8,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     cors: {
       origin: 'http://localhost:3000',
+      // origin: 'https://2453-188-226-109-63.eu.ngrok.io',
       credentials: true,
     },
   });

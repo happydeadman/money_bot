@@ -20,4 +20,12 @@ export class UsersService {
     const user = await this.userModel.findOne({ username });
     return user;
   }
+  async doesUserExist(userName: string) {
+    const username = userName.toLowerCase();
+    const user = await this.userModel.findOne({ username });
+    if (user) {
+      return true;
+    }
+    return false;
+  }
 }

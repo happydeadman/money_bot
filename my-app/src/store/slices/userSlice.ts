@@ -7,7 +7,7 @@ export interface IUser {
 }
 
 const initialState: IUser = {
-  userId: null,
+  userId: undefined,
   userName: "",
   token: "",
 };
@@ -22,7 +22,7 @@ const userSlice = createSlice({
       state.token = action.payload.token;
     },
     removeUser(state) {
-      state.userId = null;
+      state.userId = undefined;
       state.userName = "";
       state.token = "";
     },

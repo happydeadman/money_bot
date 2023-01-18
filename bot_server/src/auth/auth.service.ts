@@ -13,10 +13,14 @@ export class AuthService {
 
   async validateUser(username: string, password: string): Promise<any> {
     const user = await this.usersService.getUser(username);
-    const passwordValid = await bcrypt.compare(password, user.password);
     if (!user) {
       throw new NotAcceptableException('could not find the user');
     }
+    const passwordValid = await bcrypt.compare(password, user.password);
+    if (!passwordValid) {
+      throw new NotAcceptableException('password incorrect');
+    }
+
     if (user && passwordValid) {
       return {
         userId: user.id,
@@ -26,10 +30,10 @@ export class AuthService {
     return null;
   }
   async login(user: any) {
-    const payload = { username: user.userName, sub: user.userId };
+    const payload = { username: user.userName, userId: user.userId };
     return {
       username: user.userName,
-      sub: user.userId,
+      userId: user.userId,
       access_token: this.jwtService.sign(payload),
     };
   }

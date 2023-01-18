@@ -5,21 +5,45 @@ import { Modal } from "../../components/Modal";
 import { useGetGroupsQuery } from "../../store/groups/groups.api";
 import { useTypedSelector } from "../../utils/hooks/useTypedSelector";
 import styles from "./Home.module.scss";
+import { Loader } from "../../components/Loader";
+import { useToast } from "@chakra-ui/react";
+import { useLogout } from "../../utils/hooks/useLogout";
 
 export function Home() {
-  const [skip, setSkip] = useState(false);
-
+  const toast = useToast();
   const { userId } = useTypedSelector((state) => state.user);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { isError, isLoading, data } = useGetGroupsQuery(userId, { skip });
+  const skip = userId === undefined ? true : false;
+  const { isError, isLoading, data, error } = useGetGroupsQuery(userId, {
+    skip,
+  });
+  const logout = useLogout();
 
   useEffect(() => {
-    // if (userId) setSkip(false);
-    // if (userId) setSkip(true);
-  }, [userId]);
+    if (error && "data" in error && error.status === 401) {
+      toast({
+        title: "Авторизационная сессия истекла",
+        description: "Пожалуйста, войдите в сервис снова",
+        status: "error",
+        duration: 9000,
+        isClosable: true,
+      });
+      logout();
+    }
+    if (error && "data" in error && error.status !== 401) {
+      toast({
+        title: "Что-то пошло не так",
+        description: "Пожалуйста, попробуйте позже и обновите страницу",
+        status: "error",
+        duration: 9000,
+        isClosable: true,
+      });
+    }
+  }, [error, isError, toast, logout]);
 
   return (
     <main className={styles.main}>
+      {isLoading && <Loader />}
       <div className={styles.container}>
         <h2 className={styles.groupHeading}>Мои группы</h2>
         <ul className={styles.groupList}>

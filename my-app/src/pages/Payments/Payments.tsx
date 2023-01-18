@@ -11,6 +11,9 @@ import { getUniqueListBy } from "../../utils/js/getUniqueListBy";
 import { PaymentsBlock } from "../../components/PaymentsBlock";
 import { MembersInfo } from "../../components/MembersInfo";
 import styles from "./Payments.module.scss";
+import { Loader } from "../../components/Loader";
+import { useToast } from "@chakra-ui/react";
+import { useLogout } from "../../utils/hooks/useLogout";
 
 export interface IGroupDetails {
   paymentsAmount: number;
@@ -21,8 +24,22 @@ export interface IGroupDetails {
 export function Payments() {
   const { id, action } = useParams();
   const { userId, userName } = useTypedSelector((state) => state.user);
-  const { data: groups } = useGetGroupsQuery(userId);
-  const { data: payments, isLoading, isError } = useGetPaymentsQuery(id);
+  const skip = userId === undefined ? true : false;
+  const toast = useToast();
+  const logout = useLogout();
+  const {
+    data: groups,
+    isLoading: groupLoading,
+    error: groupError,
+  } = useGetGroupsQuery(userId, {
+    skip,
+  });
+  const {
+    data: payments,
+    isLoading,
+    isError,
+    error: paymentError,
+  } = useGetPaymentsQuery(id);
 
   const [groupInfo, setGroupInfo] = useState<IGroups>();
   const [groupDetails, setGroupDetails] = useState<IGroupDetails>({
@@ -35,6 +52,38 @@ export function Payments() {
     },
   });
   const [page, setPage] = useState<JSX.Element>();
+
+  useEffect(() => {
+    if (groupError && "data" in groupError && groupError.status === 401) {
+      toast({
+        title: "Авторизационная сессия истекла",
+        description: "Пожалуйста, войдите в сервис снова",
+        status: "error",
+        duration: 9000,
+        isClosable: true,
+      });
+      logout();
+    }
+    if (paymentError && "data" in paymentError && paymentError.status === 401) {
+      toast({
+        title: "Авторизационная сессия истекла",
+        description: "Пожалуйста, войдите в сервис снова",
+        status: "error",
+        duration: 9000,
+        isClosable: true,
+      });
+      logout();
+    }
+    if (groupError && "data" in groupError && groupError.status !== 401) {
+      toast({
+        title: "Что-то пошло не так",
+        description: "Пожалуйста, попробуйте позже и обновите страницу",
+        status: "error",
+        duration: 9000,
+        isClosable: true,
+      });
+    }
+  }, [groupError, isError, toast, paymentError, logout]);
 
   useEffect(() => {
     if (!payments || !groupInfo) return;
@@ -61,6 +110,8 @@ export function Payments() {
 
   return (
     <main className={styles.main}>
+      {groupLoading && <Loader />}
+      {isLoading && <Loader />}
       <GroupInfo groupDetails={groupDetails} groupInfo={groupInfo} />
       {page}
     </main>

@@ -9,14 +9,18 @@ import { Footer } from "./components/Footer";
 import { ProtectedRoutes } from "./components/ProtectedRoutes/ProtectedRoutes";
 import { Payments } from "./pages/Payments";
 import { useEffect, useState } from "react";
+import { useTelegram } from "./utils/hooks/useTelegram";
 
 axios.defaults.withCredentials = true;
 
 function App() {
   const [mounted, setMounted] = useState(false);
+  const { tg } = useTelegram();
   useEffect(() => {
+    tg.ready();
     setMounted(true);
-  }, []);
+  }, [tg]);
+  console.log(tg.ready());
   return (
     <>
       {mounted && (
